@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>编辑商品</title>
+</head>
+<body>
+    <h1>编辑商品</h1>
+    <form action="/edit/{{ product.id }}" method="post">
+        商品名: <input type="text" name="name" value="{{ product.name }}" required>
+        价格: <input type="text" name="price" value="{{ product.price }}" required>
+        <button type="submit">保存修改</button>
+    </form>
+</body>
+</html>
