@@ -1,6 +1,6 @@
-import logging
+import logging  # 导入日志模块
 from flask import Flask, request, jsonify  # 导入Flask相关模块
-from celery import Celery
+from celery import Celery  # 导入Celery模块
 from flask_sqlalchemy import SQLAlchemy  # 导入SQLAlchemy模块
 from datetime import datetime  # 导入datetime模块
 import requests  # 导入requests模块
@@ -17,14 +17,15 @@ app = Flask(__name__)  # 创建Flask应用实例
 # 配置 Celery
 app.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/0'
 app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/0'
-celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
-celery.conf.update(app.config)
+celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])  # 初始化Celery实例
+celery.conf.update(app.config)  # 更新Celery配置
 
 # PostgreSQL 数据库配置
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:123456@localhost/Ai_teacher'  # 设置数据库URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # 禁用修改追踪
 
 db = SQLAlchemy(app)  # 初始化SQLAlchemy实例
+
 
 # 定义商品的数据库模型
 class Product(db.Model):  # 定义Product类
@@ -38,6 +39,7 @@ class Product(db.Model):  # 定义Product类
     discount_price = db.Column(db.Numeric(10, 2))  # 设置discount_price字段
     description = db.Column(db.String(255))  # 设置description字段
 
+
 # 定义用户的数据库模型
 class User(db.Model):  # 定义User类
     __tablename__ = 'users'  # 设置表名
@@ -46,8 +48,10 @@ class User(db.Model):  # 定义User类
     email = db.Column(db.String(255))  # 设置email字段
     password = db.Column(db.String(255))  # 设置password字段
     created_at = db.Column(db.TIMESTAMP, default=datetime.utcnow)  # 设置created_at字段
+
     def __repr__(self):  # 定义对象表示方法
-       return f'<User {self.username}>'  # 返回用户字符串表示
+        return f'<User {self.username}>'  # 返回用户字符串表示
+
 
 # 定义订单的数据库模型
 class Order(db.Model):  # 定义Order类
@@ -61,6 +65,7 @@ class Order(db.Model):  # 定义Order类
     created_at = db.Column(db.TIMESTAMP, default=datetime.utcnow)  # 设置created_at字段
     updated_at = db.Column(db.TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)  # 设置updated_at字段
 
+
 # 定义订单项的数据库模型
 class OrderItem(db.Model):  # 定义OrderItem类
     __tablename__ = 'order_items'  # 设置表名
@@ -68,6 +73,7 @@ class OrderItem(db.Model):  # 定义OrderItem类
     order_id = db.Column(db.Integer, db.ForeignKey('orders.order_id'), nullable=False)  # 设置外键
     product_id = db.Column(db.Integer, db.ForeignKey('products.product_id'), nullable=False)  # 设置外键
     quantity = db.Column(db.Integer, nullable=False)  # 设置quantity字段
+
 
 # 定义已购书籍的数据库模型
 class PurchasedBook(db.Model):  # 定义PurchasedBook类
@@ -77,6 +83,7 @@ class PurchasedBook(db.Model):  # 定义PurchasedBook类
     product_id = db.Column(db.Integer, db.ForeignKey('products.product_id'), nullable=False)  # 设置外键
     purchase_date = db.Column(db.TIMESTAMP, default=datetime.utcnow)  # 设置purchase_date字段
     amount = db.Column(db.Integer, nullable=False)  # 设置amount字段
+
 
 with app.app_context():  # 在应用上下文中创建所有表
     db.create_all()
@@ -139,20 +146,20 @@ with app.app_context():  # 在应用上下文中创建所有表
 
 
     # 构建待签名的消息字符串
-    def build_message(appid, timestamp, nonce_str, prepay_id):# 构建待签名的消息字符串
+    def build_message(appid, timestamp, nonce_str, prepay_id):  # 构建待签名的消息字符串
         # 按照微信支付要求的顺序构造签名串
-        return f"{appid}\n{timestamp}\n{nonce_str}\n{prepay_id}\n"# 拼接消息字符串
+        return f"{appid}\n{timestamp}\n{nonce_str}\n{prepay_id}\n"  # 拼接消息字符串
 
 
     # 构造签名并生成Authorization请求头
     def generate_authorization_header(mchid, nonce_str, signature, serial_no):  # 生成授权头
         timestamp = str(int(time.time()))  # 保证时间戳为整数 # 获取当前时间戳
         authorization = (  # 构造授权头
-            f'WECHATPAY2-SHA256-RSA2048 mchid="{mchid}",'
-            f'nonce_str="{nonce_str}",'
-            f'signature="{base64.b64encode(signature).decode()}",'
-            f'timestamp="{timestamp}",'
-            f'serial_no="{serial_no}"'
+            f'WECHATPAY2-SHA256-RSA2048 mchid="{mchid}",'  # 构造mchid部分
+            f'nonce_str="{nonce_str}",'  # 构造nonce_str部分
+            f'signature="{base64.b64encode(signature).decode()}",'  # 构造signature部分
+            f'timestamp="{timestamp}",'  # 构造timestamp部分
+            f'serial_no="{serial_no}"'  # 构造serial_no部分
         )
         return authorization  # 返回授权头
 
@@ -160,56 +167,58 @@ with app.app_context():  # 在应用上下文中创建所有表
     # 请求微信支付统一下单接口并签名
     @app.route('/wechat_unified_order', methods=['POST'])
     def wechat_unified_order():
-        data = request.get_json()
+        data = request.get_json()  # 获取请求体中的JSON数据
         # 获取请求中的参数
-        user_id = data['user_id']
-        order_id = data['order_id']
-        total_fee = data['total_fee']
-        product_description = data['description']
-        openid = data['openid']
+        user_id = data['user_id']  # 获取用户ID
+        order_id = data['order_id']  # 获取订单ID
+        total_fee = data['total_fee']  # 获取总费用
+        product_description = data['description']  # 获取商品描述
+        openid = data['openid']  # 获取OpenID
 
         # 查询订单
-        order = Order.query.get(order_id)
-        if not order:
-            return jsonify({'error': 'Order not found'}), 404
+        order = Order.query.get(order_id)  # 根据订单ID查询订单
+        if not order:  # 如果订单不存在
+            return jsonify({'error': 'Order not found'}), 404  # 返回404错误
 
         # 调用微信支付接口获取prepay_id
-        payload = {
-            'appid': WECHAT_APPID,
-            'mchid': WECHAT_MCH_ID,
-            'description': product_description,
-            'out_trade_no': str(order_id),
-            'amount': {'total': int(total_fee), 'currency': 'CNY'},
-            'payer': {'openid': openid},
-            'notify_url': WECHAT_NOTIFY_URL
+        payload = {  # 构造请求体
+            'appid': WECHAT_APPID,  # 应用ID
+            'mchid': WECHAT_MCH_ID,  # 商户ID
+            'description': product_description,  # 商品描述
+            'out_trade_no': str(order_id),  # 商户订单号
+            'amount': {'total': int(total_fee), 'currency': 'CNY'},  # 金额和货币单位
+            'payer': {'openid': openid},  # 支付者信息
+            'notify_url': WECHAT_NOTIFY_URL  # 回调通知URL
         }
 
         # 构造待签名的消息
-        nonce_str = generate_nonce_str()
-        timestamp = str(int(time.time()))
+        nonce_str = generate_nonce_str()  # 生成随机字符串
+        timestamp = str(int(time.time()))  # 获取当前时间戳
 
         # 模拟预支付id (在实际代码中由微信API返回)
-        prepay_id = "wx201410272009395522657a690389285100"
+        prepay_id = "wx201410272009395522657a690389285100"  # 示例预支付ID
 
-        message = build_message(WECHAT_APPID, timestamp, nonce_str, prepay_id)
+        message = build_message(WECHAT_APPID, timestamp, nonce_str, prepay_id)  # 构造待签名的消息
 
         # 生成签名
-        signature = generate_rsa_sign(message)
+        signature = generate_rsa_sign(message)  # 生成签名
 
-        authorization_header = generate_authorization_header(WECHAT_MCH_ID, nonce_str, signature, WECHAT_SERIAL_NO)
+        authorization_header = generate_authorization_header(WECHAT_MCH_ID, nonce_str, signature,
+                                                             WECHAT_SERIAL_NO)  # 生成授权头
 
-        headers = {
-            'Authorization': authorization_header,
-            'Content-Type': 'application/json'
+        headers = {  # 构造请求头
+            'Authorization': authorization_header,  # 授权头
+            'Content-Type': 'application/json'  # 内容类型
         }
 
-        response = requests.post(WECHAT_UNIFIED_ORDER_URL, json=payload, headers=headers)
+        response = requests.post(WECHAT_UNIFIED_ORDER_URL, json=payload, headers=headers)  # 发送POST请求
 
-        if response.status_code == 200:
-            return jsonify(response.json())
-        else:
-            logging.error(f"WeChat unified order failed: {response.json()}")
-            return jsonify({'error': 'Unified order failed', 'response': response.json()}), response.status_code
+        if response.status_code == 200:  # 如果响应状态码为200
+            return jsonify(response.json())  # 返回响应JSON
+        else:  # 否则
+            logging.error(f"WeChat unified order failed: {response.json()}")  # 记录错误日志
+            return jsonify(
+                {'error': 'Unified order failed', 'response': response.json()}), response.status_code  # 返回错误信息及状态码
 
 
     # 定义异步任务处理微信回调
