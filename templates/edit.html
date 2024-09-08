@@ -2,15 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>编辑商品</title>
 </head>
 <body>
     <h1>编辑商品</h1>
-    <form action="/edit/{{ product.id }}" method="post">
-        商品名: <input type="text" name="name" value="{{ product.name }}" required>
-        价格: <input type="text" name="price" value="{{ product.price }}" required>
+    <form action="/edit/{{ product.id }}" method="POST">
+        <label for="bookurl">书籍链接:</label><input type="text" name="bookurl" value="{{ product.bookurl }}"><br>
+        <label for="ver">版本:</label><input type="text" name="ver" value="{{ product.ver }}"><br>
+        <label for="price">价格:</label><input type="text" name="price" value="{{ product.price }}"><br>
+        <label for="type">类型:</label><input type="text" name="type" value="{{ product.type }}"><br>
+        <label for="bookname">书名:</label><input type="text" name="bookname" value="{{ product.bookname }}"><br>
+        <label for="discount_price">折扣价:</label><input type="text" name="discount_price" value="{{ product.discount_price }}"><br>
+        <label for="description">描述:</label><input type="text" name="description" value="{{ product.description }}"><br>
         <button type="submit">保存修改</button>
     </form>
+    <br>
+    <a href="/">返回首页</a>
 </body>
 </html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>我的书籍</title>
+</head>
+<body>
+    <h1>我购买的书籍</h1>
+    <ul>
+        {% for book in books %}
+        <li>
+            书名: {{ book.bookname }} | 购买日期: {{ book.purchase_date }} | 数量: {{ book.amount }}
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
