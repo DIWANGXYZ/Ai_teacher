@@ -9,9 +9,9 @@ from ..utils import generate_nonce_str, generate_rsa_sign, build_message, genera
 
 bp = Blueprint('payment', __name__)  # 创建名为 'payment' 的蓝图
 
-WECHAT_APPID = 'ww318b83c9b073b30b'  # 微信公众号的 AppID
-WECHAT_MCH_ID = '1558863131'  # 微信支付的商户号
-WECHAT_API_KEY = '7HBEWIUWEFI27fhHJGJU823IURHH2FH2'  # 微信支付的 API 密钥
+WECHAT_APPID = ''  # 微信公众号的 AppID
+WECHAT_MCH_ID = ''  # 微信支付的商户号
+WECHAT_API_KEY = ''  # 微信支付的 API 密钥
 WECHAT_UNIFIED_ORDER_URL = 'https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi'  # 微信支付统一下单接口 URL
 WECHAT_ORDER_QUERY_URL = 'https://api.mch.weixin.qq.com/v3/pay/transactions/out-trade-no'  # 微信支付查询订单接口 URL
 WECHAT_NOTIFY_URL = 'https://qb.duoduozhijiao.cn/api/weixin/pay/onNotify'  # 微信支付异步通知回调 URL
