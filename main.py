@@ -1,4 +1,4 @@
-from Ai_teacher import create_app  # 导入创建应用的函数
+from . import create_app  # 导入创建应用的函数
 
 app = create_app('Ai_teacher.config.Config')  # 提供配置类路径，创建 Flask 应用实例
 

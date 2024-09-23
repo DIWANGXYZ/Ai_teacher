@@ -1,4 +1,4 @@
-from Ai_teacher import db  # 导入数据库模块
+from . import db  # 导入数据库模块
 from datetime import datetime  # 导入日期时间模块
 
 # 定义产品模型

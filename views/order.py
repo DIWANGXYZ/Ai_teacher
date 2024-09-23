@@ -1,4 +1,3 @@
-from crypt import methods
 
 from flask import Blueprint, jsonify  # 导入 Blueprint 和 jsonify 模块
 from ..models import Order  # 导入 Order 模型
@@ -19,7 +18,7 @@ def my_orders(user_id):  # 定义视图函数
         order_list.append(order_data)  # 将订单数据添加到列表中
     return jsonify({'orders': order_list})  # 返回 JSON 格式的订单列表
 
-@bp.route('api/v1/order/new', methods=['POST'])
+@bp.route('/api/v1/order/new', methods=['POST'])
 def create_order():
 
     return jsonify({'order_id': 'xxxx'})
