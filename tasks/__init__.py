@@ -1,5 +1,5 @@
 from celery import Celery  # 导入 Celery 模块
-from .. import create_app  # 导入 create_app 函数
+from Ai_teacher import create_app  # 导入 create_app 函数
 
 app = create_app()  # 创建 Flask 应用实例
 
