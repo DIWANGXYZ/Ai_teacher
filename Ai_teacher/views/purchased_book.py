@@ -4,7 +4,7 @@ from ..models import PurchasedBook  # 导入 PurchasedBook 模型
 bp = Blueprint('purchased_book', __name__)  # 创建名为 'purchased_book' 的蓝图
 
 # 定义路由和请求方法
-@bp.route('/purchased_books/<int:user_id>', methods=['GET'])
+@bp.route('/api/v1/users/<int:user_id>/books/', methods=['GET'])
 def get_purchased_books(user_id):
     purchased_books = PurchasedBook.query.filter_by(user_id=user_id).all()  # 查询指定用户的已购书籍
     book_list = []  # 初始化书籍列表

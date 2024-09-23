@@ -9,7 +9,7 @@ from cryptography.hazmat.primitives import serialization  # 导入serialization�
 
 
 def load_private_key():
-    with open('merchant_private_key.pem', 'rb') as key_file:
+    with open('apiclient_key.pem', 'rb') as key_file:
         private_key = serialization.load_pem_private_key(
             key_file.read(),
             password=None,
@@ -17,7 +17,7 @@ def load_private_key():
     return private_key
 
 def load_public_key():
-    with open('wechatpay_public_key.pem', 'rb') as key_file:
+    with open('public_key.pem', 'rb') as key_file:
         public_key = serialization.load_pem_public_key(
             key_file.read()
         )

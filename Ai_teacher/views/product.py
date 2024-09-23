@@ -4,7 +4,7 @@ from ..models import Product  # 导入 Product 模型
 bp = Blueprint('product', __name__)  # 创建名为 'product' 的蓝图
 
 # 定义路由和请求方法
-@bp.route('/products', methods=['GET'])
+@bp.route('/api/v1/products', methods=['GET'])
 def get_products():
     products = Product.query.all()  # 查询所有产品
     product_list = []  # 初始化产品列表

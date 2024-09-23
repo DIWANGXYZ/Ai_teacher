@@ -18,7 +18,8 @@ def process_wechat_callback(self, callback_data):  # 定义处理微信回调的
         try:
             if verify_signature(sign, message):  # 验证签名
                 if callback_data['event_type'] == 'TRANSACTION.SUCCESS':  # 如果交易成功
-                    order_id = callback_data['out_trade_no']  # 获取订单ID
+                    # 这里根据APP支付返回的数据格式获取订单号
+                    order_id = callback_data['resource']['out_trade_no']  # 获取订单ID
                     order = Order.query.get(order_id)  # 查询订单
                     if order:
                         order.payment_status = 'paid'  # 更新订单支付状态
@@ -33,6 +34,7 @@ def process_wechat_callback(self, callback_data):  # 定义处理微信回调的
         logging.error(f"Error processing WeChat callback: {e}")  # 记录错误日志
         self.retry(exc=e, countdown=60)  # 重试任务
         return {'error': 'Server error'}, 500  # 返回服务器错误信息
+
 
 
 
