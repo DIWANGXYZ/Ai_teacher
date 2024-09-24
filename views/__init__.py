@@ -1,5 +1,7 @@
-from flask import Blueprint  # 导入 Blueprint 类
+from flask import Blueprint
 
-bp = Blueprint('order', __name__)  # 创建名为 'order' 的蓝图
+bp = Blueprint('views', __name__)
 
-from . import order  # 导入 order 模块
+from . import order, payment, product, purchased_book, user
+
+

@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify  # 导入 Blueprint 和 jsonify 模块
-from ..models import User  # 导入 User 模型
+from models import User  # 导入 User 模型
 
 bp = Blueprint('user', __name__)  # 创建名为 'user' 的蓝图
 

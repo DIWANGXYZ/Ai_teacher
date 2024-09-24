@@ -1,4 +1,5 @@
 import logging  # 导入日志模块
+import os
 import random  # 导入random模块
 import string  # 导入string模块
 import time  # 导入time模块
@@ -9,15 +10,24 @@ from cryptography.hazmat.primitives import serialization  # 导入serialization�
 
 
 def load_private_key():
-    with open('apiclient_key.pem', 'rb') as key_file:
+    key_path = r'D:\Work\Ai_teacher\cret\apiclient_key.pem'
+
+    with open(key_path, 'rb') as key_file:
         private_key = serialization.load_pem_private_key(
             key_file.read(),
             password=None,
         )
     return private_key
 
+
+# 调用函数
+private_key = load_private_key()
+
+
 def load_public_key():
-    with open('public_key.pem', 'rb') as key_file:
+    key_path = r'D:\Work\Ai_teacher\cret\public_key.pem'
+
+    with open(key_path, 'rb') as key_file:
         public_key = serialization.load_pem_public_key(
             key_file.read()
         )
@@ -57,15 +67,20 @@ def verify_signature(signature, message, public_key):  # 将公钥作为参数�
         logging.error(f"Signature verification failed: {e}")  # 记录签名验证失败的错误日志
         return False  # 返回False
 
+# 生成符合要求的 out_trade_no
+def generate_out_trade_no(order_id):
+    # 确保 out_trade_no 至少 6 个字符
+    return f"ORDER_{order_id}_{int(time.time())}"
+
 
 # 构建待签名的消息字符串
-def build_message(appid, timestamp, nonce_str, prepay_id):  # 定义构建待签名消息的函数
-    return f"{appid}\n{timestamp}\n{nonce_str}\n{prepay_id}\n"  # 按照微信支付要求的顺序构建签名字符串
+def build_message(http_method, url, timestamp, nonce_str, body):
+    message = f"{http_method}\n{url}\n{timestamp}\n{nonce_str}\n{body}\n"
+    return message
 
 
 # 构造签名并生成Authorization请求头
-def generate_authorization_header(mchid, nonce_str, signature, serial_no):  # 定义生成授权头的函数
-    timestamp = str(int(time.time()))  # 获取当前的时间戳
+def generate_authorization_header(mchid, nonce_str, signature, serial_no, timestamp):  # 定义生成授权头的函数
     authorization = (  # 构造Authorization头信息
         f'WECHATPAY2-SHA256-RSA2048 mchid="{mchid}",'  # mchid部分
         f'nonce_str="{nonce_str}",'  # 随机字符串部分

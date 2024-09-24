@@ -1,5 +1,7 @@
-from . import db  # 导入数据库模块
 from datetime import datetime  # 导入日期时间模块
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
 
 # 定义产品模型
 class Product(db.Model):

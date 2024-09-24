@@ -1,8 +1,6 @@
 from flask import Flask  # 导入 Flask 模块
-from flask_sqlalchemy import SQLAlchemy  # 导入 SQLAlchemy 模块
 from celery import Celery  # 导入 Celery 模块
-
-db = SQLAlchemy()  # 初始化 SQLAlchemy
+from models import db
 celery = Celery(__name__)  # 初始化 Celery
 
 def create_app(config_class='Ai_teacher.config.Config'):

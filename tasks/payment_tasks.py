@@ -1,4 +1,4 @@
-from Ai_teacher import celery, db
+from .. import celery, db
 from ..models import Order
 from ..utils import verify_signature
 import logging  # 增加日志
