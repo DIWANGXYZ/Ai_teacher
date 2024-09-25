@@ -1,6 +1,7 @@
-from flask import Flask  # 导入 Flask 模块
-from celery import Celery  # 导入 Celery 模块
+from flask import Flask
+from celery import Celery
 from models import db
+
 celery = Celery(__name__)  # 初始化 Celery
 
 def create_app(config_class='Ai_teacher.config.Config'):

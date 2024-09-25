@@ -68,10 +68,12 @@ def verify_signature(signature, message, public_key):  # 将公钥作为参数�
         return False  # 返回False
 
 # 生成符合要求的 out_trade_no
-def generate_out_trade_no(order_id):
-    # 确保 out_trade_no 至少 6 个字符
-    return f"ORDER_{order_id}_{int(time.time())}"
-
+def generate_out_trade_no(uid):
+    # 确保 out_trade_no 至少 6 个字符，并限制长度
+    uid_part = str(uid)[:16]  # 截取 uid 的前 16 个字符
+    timestamp_part = str(int(time.time()))  # 获取当前时间戳
+    order_id = f"ORDER_{uid_part}_{timestamp_part}"  # 生成订单号
+    return order_id[:32]  # 确保不超过 32 个字符
 
 # 构建待签名的消息字符串
 def build_message(http_method, url, timestamp, nonce_str, body):

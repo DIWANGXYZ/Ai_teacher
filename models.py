@@ -18,7 +18,7 @@ class Product(db.Model):
 # 定义用户模型
 class User(db.Model):
     __tablename__ = 'users'  # 设置表名为 users
-    user_id = db.Column(db.Integer, primary_key=True)  # 用户ID，主键
+    user_id = db.Column(db.String(255), primary_key=True)  # 用户ID，主键
     username = db.Column(db.String(255))  # 用户名
     email = db.Column(db.String(255))  # 邮箱
     password = db.Column(db.String(255))  # 密码
@@ -30,10 +30,10 @@ class User(db.Model):
 # 定义订单模型
 class Order(db.Model):
     __tablename__ = 'orders'  # 设置表名为 orders
-    order_id = db.Column(db.Integer, primary_key=True)  # 订单ID，主键
+    order_id = db.Column(db.String(255), primary_key=True)  # 订单ID，现在是字符串类型
     total_price = db.Column(db.Numeric(10, 2))  # 总价
     payment_price = db.Column(db.Numeric(10, 2))  # 实付金额
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)  # 用户ID，外键关联用户表
+    user_id = db.Column(db.String(255), db.ForeignKey('users.user_id'), nullable=False)  # 用户ID，外键关联用户表
     payment_status = db.Column(db.String(255))  # 支付状态
     transaction_id = db.Column(db.String(255))  # 交易ID
     created_at = db.Column(db.TIMESTAMP, default=datetime.utcnow)  # 创建时间，默认为当前时间
@@ -43,7 +43,7 @@ class Order(db.Model):
 class OrderItem(db.Model):
     __tablename__ = 'order_items'  # 设置表名为 order_items
     id = db.Column(db.Integer, primary_key=True)  # ID，主键
-    order_id = db.Column(db.Integer, db.ForeignKey('orders.order_id'), nullable=False)  # 订单ID，外键关联订单表
+    order_id = db.Column(db.String(255), db.ForeignKey('orders.order_id'), nullable=False)  # 订单ID，外键关联订单表
     product_id = db.Column(db.Integer, db.ForeignKey('products.product_id'), nullable=False)  # 产品ID，外键关联产品表
     quantity = db.Column(db.Integer, nullable=False)  # 数量
     price = db.Column(db.Numeric(10, 2), nullable=False)  # 单价
@@ -53,7 +53,7 @@ class OrderItem(db.Model):
 class PurchasedBook(db.Model):
     __tablename__ = 'purchased_books'  # 设置表名为 purchased_books
     id = db.Column(db.Integer, primary_key=True)  # ID，主键
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)  # 用户ID，外键关联用户表
+    user_id = db.Column(db.String(255), db.ForeignKey('users.user_id'), nullable=False)  # 用户ID，外键关联用户表
     product_id = db.Column(db.Integer, db.ForeignKey('products.product_id'), nullable=False)  # 产品ID，外键关联产品表
     purchase_date = db.Column(db.TIMESTAMP, default=datetime.utcnow)  # 购买时间，默认为当前时间
     amount = db.Column(db.Integer, nullable=False)  # 购买数量
