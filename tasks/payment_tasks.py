@@ -5,7 +5,7 @@ import logging  # 增加日志
 
 # 定义异步任务处理微信回调
 @celery.task(bind=True, max_retries=3)  # 定义Celery任务，处理微信支付回调
-def process_wechat_callback(self, callback_data):  # 定义处理微信回调的函数
+def process_wechat_callback(self, callback_data,public_key):  # 定义处理微信回调的函数
     try:
         # 校验回调数据是否完整
         if not all(key in callback_data for key in ('sign', 'id', 'event_type', 'resource')):
@@ -16,7 +16,7 @@ def process_wechat_callback(self, callback_data):  # 定义处理微信回调的
 
         # 验证签名
         try:
-            if verify_signature(sign, message):  # 验证签名
+            if verify_signature(sign, message,public_key):  # 验证签名
                 if callback_data['event_type'] == 'TRANSACTION.SUCCESS':  # 如果交易成功
                     # 这里根据APP支付返回的数据格式获取订单号
                     order_id = callback_data['resource']['out_trade_no']  # 获取订单ID
