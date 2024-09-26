@@ -8,9 +8,11 @@ from cryptography.hazmat.primitives import hashes  # 导入hashes模块
 from cryptography.hazmat.primitives.asymmetric import padding  # 导入padding模块
 from cryptography.hazmat.primitives import serialization  # 导入serialization模块
 
-
 def load_private_key():
-    key_path = r'D:\Work\Ai_teacher\cret\apiclient_key.pem'
+    # 获取当前脚本的目录
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    # 构建相对路径
+    key_path = os.path.join(current_dir, 'cret', 'apiclient_key.pem')
 
     with open(key_path, 'rb') as key_file:
         private_key = serialization.load_pem_private_key(
@@ -25,11 +27,13 @@ private_key = load_private_key()
 
 
 def load_public_key():
-    key_path = r'D:\Work\Ai_teacher\cret\public_key.pem'
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    # 构建相对路径
+    key_path = os.path.join(current_dir, 'cret', 'public_key.pem')
 
     with open(key_path, 'rb') as key_file:
         public_key = serialization.load_pem_public_key(
-            key_file.read()
+            key_file.read(),
         )
     return public_key
 

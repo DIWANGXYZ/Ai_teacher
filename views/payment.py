@@ -13,13 +13,15 @@ bp = Blueprint('payment', __name__)  # 创建名为 'payment' 的蓝图
 private_key = load_private_key()
 public_key = load_public_key()
 
-WECHAT_APPID = 'wx61747d31a0c20812'  # 微信 APP 的 AppID
-WECHAT_MCH_ID = '1592365211'  # 微信支付的商户号
-WECHAT_API_KEY = 'e820c835dda6afb4a3f902ed7ffba6b7'  # 微信支付的 API 密钥
-WECHAT_UNIFIED_ORDER_URL = 'https://api.mch.weixin.qq.com/v3/pay/transactions/app'  # 微信支付 APP 场景的下单接口 URL
-WECHAT_NOTIFY_URL = 'https://www.duoduozhijiao.cn/notify'  # 微信支付异步通知回调 URL
-WECHAT_SERIAL_NO = '46A85E6C5BDE0CB76B1EB839FFAEC8FFEE6A5AD7'  # 微信支付证书的序列号
+from config import Config
 
+# 在调用函数前设置全局变量
+WECHAT_APPID = Config.WECHAT_APPID
+WECHAT_MCH_ID = Config.WECHAT_MCH_ID
+WECHAT_NOTIFY_URL = Config.WECHAT_NOTIFY_URL
+WECHAT_UNIFIED_ORDER_URL = Config.WECHAT_UNIFIED_ORDER_URL
+WECHAT_SERIAL_NO = Config.WECHAT_SERIAL_NO
+WECHAT_API_KEY = Config.WECHAT_API_KEY
 
 @bp.route('/api/v1/user/book/purchase', methods=['POST'])
 def purchase_book():
