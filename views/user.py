@@ -4,7 +4,7 @@ from models import User  # 导入 User 模型
 bp = Blueprint('user', __name__)  # 创建名为 'user' 的蓝图
 
 # 定义路由和请求方法
-@bp.route('/api/v1/users/<int:user_id>', methods=['GET'])
+@bp.route('/api/v1/users/<string:user_id>', methods=['GET'])
 def get_user(user_id):
     user = User.query.get(user_id)  # 查询指定用户 ID 的用户
     if user:  # 如果用户存在
